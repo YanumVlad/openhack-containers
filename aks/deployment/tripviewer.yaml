@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tripviewer-svc-deployment
+  labels:
+    app: tripviewer-svc-deployment
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: tripviewer-svc
+  template:
+    metadata:
+      labels:
+        app: tripviewer-svc
+    spec:
+      containers:
+      - name: tripviewer
+        image: registryayb1330.azurecr.io/openhacks-vlad/tripviewer:v1
+        ports:
+        - containerPort: 80

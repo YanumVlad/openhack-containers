@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: poi-svc-deployment
+  labels:
+    app: poi-svc-deployment
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: poi-svc-deployment
+  template:
+    metadata:
+      labels:
+        app: poi-svc-deployment
+    spec:
+      containers:
+      - name: poi
+        image: registryayb1330.azurecr.io/openhacks-vlad/poi:v1
+        ports:
+        - containerPort: 80
+
+        env:
+        - name: SQL_SERVER
+          value: "sqlserverayb1330.database.windows.net"
+        - name: SQL_USER
+          value: "sqladminaYb1330"        
+        - name: SQL_PASSWORD
+          value: "oV9xv2Gg9"  
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: poi-svc-deployment
+  labels:
+    app: poi-svc-deployment
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    app: poi-svc-deployment

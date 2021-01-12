@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-java-svc-deployment
+  labels:
+    app: user-java-svc-deployment
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: user-java-svc
+  template:
+    metadata:
+      labels:
+        app: user-java-svc
+    spec:
+      containers:
+      - name: user-java
+        image: registryayb1330.azurecr.io/openhacks-vlad/user-java:v1
+        ports:
+        - containerPort: 80

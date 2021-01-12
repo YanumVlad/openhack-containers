@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: userprofile-svc-deployment
+  labels:
+    app: userprofile-svc-deployment
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: userprofile-svc
+  template:
+    metadata:
+      labels:
+        app: userprofile-svc
+    spec:
+      containers:
+      - name: userprofile
+        image: registryayb1330.azurecr.io/openhacks-vlad/userprofile:v1
+        ports:
+        - containerPort: 80

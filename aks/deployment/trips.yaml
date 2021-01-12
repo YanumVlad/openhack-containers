@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trips-svc-deployment
+  labels:
+    app: trips-svc-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: trips-svc
+  template:
+    metadata:
+      labels:
+        app: trips-svc
+    spec:
+      containers:
+      - name: trips
+        image: registryayb1330.azurecr.io/openhacks-vlad/trips:v1
+        ports:
+        - containerPort: 80
