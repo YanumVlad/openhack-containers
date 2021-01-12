@@ -8,14 +8,29 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      app: trips-svc
+      app: trips-svc-deployment
   template:
     metadata:
       labels:
-        app: trips-svc
+        app: trips-svc-deployment
     spec:
       containers:
       - name: trips
         image: registryayb1330.azurecr.io/openhacks-vlad/trips:v1
         ports:
         - containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: trips-svc-deployment
+  labels:
+    app: trips-svc-deployment
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    app: trips-svc-deployment
