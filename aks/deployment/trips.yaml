@@ -8,14 +8,40 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      app: trips-svc
+      app: trips-svc-deployment
   template:
     metadata:
       labels:
-        app: trips-svc
+        app: trips-svc-deployment
     spec:
       containers:
       - name: trips
         image: registryayb1330.azurecr.io/openhacks-vlad/trips:v1
         ports:
         - containerPort: 80
+        env:
+        - name: SQL_SERVER
+          value: "sqlserverayb1330.database.windows.net"
+
+        - name: SQL_USER
+          value: "sqladminaYb1330"        
+
+        - name: SQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: openhack-secret
+              key: SQL_PASSWORD          
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: trips-svc-deployment
+  labels:
+    app: trips-svc-deployment
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    app: trips-svc-deployment
