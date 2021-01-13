@@ -1,0 +1,102 @@
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: web-dev-user-editor
+  namespace: web-dev-namespace
+rules:
+  - apiGroups: ["*"]
+    resources: ["*"]
+    verbs: ["*"]
+
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: web-dev-user-viewer
+  namespace: web-dev-namespace
+rules:
+  - apiGroups: ["*"]
+    resources: ["*"]
+    verbs: ["get", "watch", "list"]
+
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: api-dev-user-editor
+  namespace: api-dev-namespace
+rules:
+  - apiGroups: ["*"]
+    resources: ["*"]
+    verbs: ["*"]
+
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: api-dev-user-viewer
+  namespace: api-dev-namespace
+rules:
+  - apiGroups: ["*"]
+    resources: ["*"]
+    verbs: ["get", "watch", "list"]
+
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: web-dev-namespace-web-user-access
+  namespace: web-dev-namespace
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: web-dev-user-editor
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: User
+  name: 8b42f4a4-dcda-4f5c-a508-34e90dad9fbb
+
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: api-dev-namespace-web-user-access
+  namespace: api-dev-namespace
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: api-dev-user-viewer
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: User
+  name: 8b42f4a4-dcda-4f5c-a508-34e90dad9fbb
+
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: web-dev-namespace-api-user-access
+  namespace: web-dev-namespace
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: web-dev-user-viewer
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: User
+  name: 942ee11f-ee40-4c65-87d5-1447bcb0af42
+
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: api-dev-namespace-api-user-access
+  namespace: api-dev-namespace
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: api-dev-user-editor
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: User
+  name: 942ee11f-ee40-4c65-87d5-1447bcb0af42

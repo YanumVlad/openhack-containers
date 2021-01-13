@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: user-java-svc-deployment
+  namespace: api-dev-namespace
   labels:
     app: user-java-svc-deployment
 spec:
