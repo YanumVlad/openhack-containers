@@ -5,17 +5,23 @@ metadata:
   labels:
     app: tripviewer-svc-deployment
 spec:
-  replicas: 5
+  replicas: 3
   selector:
     matchLabels:
-      app: tripviewer-svc
+      app: tripviewer-svc-deployment
   template:
     metadata:
       labels:
-        app: tripviewer-svc
+        app: tripviewer-svc-deployment
     spec:
       containers:
-      - name: tripviewer
-        image: registryayb1330.azurecr.io/openhacks-vlad/tripviewer:v1
-        ports:
-        - containerPort: 80
+        - name: tripviewer
+          image: registryayb1330.azurecr.io/openhacks-vlad/tripviewer:v1
+          ports:
+            - containerPort: 80
+
+          env:
+            - name: TRIPS_API_ENDPOINT
+              value: "http://trips-svc-deployment.default.svc.cluster.local"
+            - name: USERPROFILE_API_ENDPOINT
+              value: "http://userprofile-svc.default.svc.cluster.local"
