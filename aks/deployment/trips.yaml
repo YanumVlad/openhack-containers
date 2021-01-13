@@ -19,7 +19,18 @@ spec:
         image: registryayb1330.azurecr.io/openhacks-vlad/trips:v1
         ports:
         - containerPort: 80
+        env:
+        - name: SQL_SERVER
+          value: "sqlserverayb1330.database.windows.net"
 
+        - name: SQL_USER
+          value: "sqladminaYb1330"        
+
+        - name: SQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: openhack-secret
+              key: SQL_PASSWORD          
 ---
 
 apiVersion: v1
