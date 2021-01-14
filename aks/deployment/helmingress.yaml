@@ -13,19 +13,19 @@ spec:
       - backend:
           serviceName: poi-svc-deployment
           servicePort: 80
-        path: /api/poi/healthcheck
+        path: /api/poi/
       - backend:
           serviceName: trips-svc-deployment
           servicePort: 80
-        path: /api/trips/healthcheck
+        path: /api/trips/
       - backend:
           serviceName: userprofile-svc
           servicePort: 80
-        path: /api/user/healthcheck
+        path: /api/user/
       - backend:
           serviceName: user-java-svc
           servicePort: 80
-        path: /api/user-java/healthcheck
+        path: /api/user-java/
 
 ---
 apiVersion: networking.k8s.io/v1beta1

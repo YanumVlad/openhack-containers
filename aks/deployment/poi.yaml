@@ -16,25 +16,36 @@ spec:
         app: poi-svc-deployment
     spec:
       containers:
-      - name: poi
-        image: registryayb1330.azurecr.io/openhacks-vlad/poi:v1
-        ports:
-        - containerPort: 80
+        - name: poi
+          image: registryayb1330.azurecr.io/openhacks-vlad/poi:v1
+          ports:
+            - containerPort: 80
 
-        env:
-        - name: SQL_SERVER
-          value: "sqlserverayb1330.database.windows.net"
+          env:
+            - name: SQL_SERVER
+              value: "sqlserverayb1330.database.windows.net"
 
-        - name: SQL_USER
-          value: "sqladminaYb1330"        
-
-        - name: SQL_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: openhack-secret
-              key: SQL_PASSWORD          
+            - name: SQL_USER
+              value: "sqladminaYb1330"
+            - name: SQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sql-password
+                  key: sql-password
+          volumeMounts:
+            - name: secrets-store-inline
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
+      volumes:
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "azure-kv"
+            nodePublishSecretRef:
+              name: akv-creds
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -44,7 +55,7 @@ metadata:
     app: poi-svc-deployment
 spec:
   ports:
-  - port: 80
-    protocol: TCP
+    - port: 80
+      protocol: TCP
   selector:
     app: poi-svc-deployment

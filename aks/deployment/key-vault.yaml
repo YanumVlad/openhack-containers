@@ -1,0 +1,33 @@
+apiVersion: secrets-store.csi.x-k8s.io/v1alpha1
+kind: SecretProviderClass
+metadata:
+  name: azure-kv
+  namespace: api-dev-namespace
+spec:
+  provider: azure
+  secretObjects:                              # [OPTIONAL] SecretObject defines the desired state of synced K8s secret objects
+  - data:
+    - key: sql-password                           # data field to populate
+      objectName: sql-password           # name of the mounted content to sync. this could be the object name or the object alias
+    secretName: sql-password                     # name of the Kubernetes Secret object
+    type: Opaque 
+  parameters:
+    usePodIdentity: "false"                   # [REQUIRED] Set to "true" if using managed identities
+    useVMManagedIdentity: "false"             # [OPTIONAL] if not provided, will default to "false"
+    userAssignedIdentityID: "c7dedc61-dd72-42bf-9f63-c1c9b9aa57a3"       # [REQUIRED]  If you're using a user-assigned identity as the VM's managed identity, specify the identity's client id. If the value is empty, it defaults to use the system-assigned identity on the VM
+    objects:  |
+      array:
+        - |
+          objectName: sql-password                 # [REQUIRED] object name
+                                              #     az keyvault secret list --vault-name "contosoKeyVault5"
+                                              #     the above command will display a list of secret names from your key vault
+          objectType: secret                  # [REQUIRED] object types: secret, key, or cert                                                     
+    keyvaultName: "registryayb1330-vault"          # [REQUIRED] the name of the key vault
+                                              #     az keyvault show --name contosoKeyVault5
+                                              #     the preceding command will display the key vault metadata, which includes the subscription ID, resource group name, key vault 
+    cloudName: ""                                # [OPTIONAL for Azure] if not provided, Azure environment will default to AzurePublicCloud
+    resourceGroup: "teamResources"     # [REQUIRED] the resource group name of the key vault
+    subscriptionId: "8afbfc4f-2a65-42ad-96f6-d609614c43eb"          # [REQUIRED] the subscription ID of the key vault
+    tenantId: "31e47b6f-93d7-4d1e-8425-637bf180c035"                      # [REQUIRED] the tenant ID of the key vault  
+
+
