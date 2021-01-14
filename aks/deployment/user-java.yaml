@@ -2,8 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: user-java-svc-deployment
+  namespace: api-dev-namespace
   labels:
-    app: user-java-svc-deployment
+    app: user-java-svc
 spec:
   replicas: 5
   selector:
@@ -15,7 +16,45 @@ spec:
         app: user-java-svc
     spec:
       containers:
-      - name: user-java
-        image: registryayb1330.azurecr.io/openhacks-vlad/user-java:v1
-        ports:
-        - containerPort: 80
+        - name: user-java
+          image: registryayb1330.azurecr.io/openhacks-vlad/user-java:v1
+          ports:
+            - containerPort: 80
+          env:
+            - name: SQL_SERVER
+              value: "sqlserverayb1330.database.windows.net"
+            - name: SQL_USER
+              value: "sqladminaYb1330"
+            - name: SQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sql-password
+                  key: sql-password
+          volumeMounts:
+            - name: secrets-store-inline
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
+    volumes:
+      - name: secrets-store-inline
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "azure-kv"
+          nodePublishSecretRef:
+            name: akv-creds
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-java-svc
+  namespace: api-dev-namespace
+  labels:
+    app: user-java-svc
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+  selector:
+    app: user-java-svc

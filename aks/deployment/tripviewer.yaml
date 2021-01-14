@@ -2,10 +2,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tripviewer-svc-deployment
+  namespace: web-dev-namespace
   labels:
     app: tripviewer-svc-deployment
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: tripviewer-svc-deployment
@@ -22,6 +23,21 @@ spec:
 
           env:
             - name: TRIPS_API_ENDPOINT
-              value: "http://trips-svc-deployment.default.svc.cluster.local"
+              value: "http://trips-svc-deployment.api-dev-namespace.svc.cluster.local"
             - name: USERPROFILE_API_ENDPOINT
-              value: "http://userprofile-svc.default.svc.cluster.local"
+              value: "http://userprofile-svc.api-dev-namespace.svc.cluster.local"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tripviewer-svc
+  namespace: web-dev-namespace
+  labels:
+    app: tripviewer-svc-deployment
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+  selector:
+    app: tripviewer-svc-deployment

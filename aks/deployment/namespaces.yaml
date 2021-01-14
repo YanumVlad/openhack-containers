@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: web-dev-namespace
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: api-dev-namespace
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: helm-ingress-control

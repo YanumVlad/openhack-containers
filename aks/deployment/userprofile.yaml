@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: userprofile-svc-deployment
+  namespace: api-dev-namespace
   labels:
     app: userprofile
 spec:
@@ -27,13 +28,27 @@ spec:
             - name: SQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: openhack-secret
-                  key: SQL_PASSWORD
+                  name: sql-password
+                  key: sql-password
+          volumeMounts:
+            - name: secrets-store-inline
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
+      volumes:
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "azure-kv"
+            nodePublishSecretRef:
+              name: akv-creds
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: userprofile-svc
+  namespace: api-dev-namespace
   labels:
     app: userprofile
 spec:
