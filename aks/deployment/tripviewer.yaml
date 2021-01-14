@@ -26,3 +26,18 @@ spec:
               value: "http://trips-svc-deployment.api-dev-namespace.svc.cluster.local"
             - name: USERPROFILE_API_ENDPOINT
               value: "http://userprofile-svc.api-dev-namespace.svc.cluster.local"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tripviewer-svc
+  namespace: web-dev-namespace
+  labels:
+    app: tripviewer-svc-deployment
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+  selector:
+    app: tripviewer-svc-deployment

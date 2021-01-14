@@ -1,0 +1,10 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: poi-svc-deployment
+  namespace: helm-ingress-control
+spec:
+  type: ExternalName
+  externalName: poi-svc-deployment.api-dev-namespace.svc.cluster.local
+  ports:
+  - port: 80
