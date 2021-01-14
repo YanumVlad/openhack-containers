@@ -17,7 +17,7 @@ spec:
       - backend:
           serviceName: trips-svc-deployment
           servicePort: 80
-        path: /api/trips/
+        path: /api/trips
       - backend:
           serviceName: userprofile-svc
           servicePort: 80
