@@ -24,8 +24,10 @@ spec:
           name: http
           protocol: TCP
         resources:
+          requests:
+            memory: 1Gi
           limits:
-            memory: 512Mi 
+            memory: 3Gi 
 ---
 apiVersion: v1
 kind: Service
